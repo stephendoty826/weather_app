@@ -1,36 +1,46 @@
 
-let response = document.querySelector("#city")
-let getWeatherButton = document.querySelector("#getWeather")
+let getWeatherForm = document.querySelector("#getWeatherForm")
+let city = document.querySelector("#city")
+let weatherContainer = document.querySelector("#weatherContainer")
 
-getWeatherButton.addEventListener("submit", (e) => {
+function createWeatherReport(classStyle, textContent=""){
+    let div = document.createElement("div")
+
+    div.setAttribute("class", classStyle)
+    div.textContent = textContent
+    weatherContainer.append(div)
+}
+
+getWeatherForm.addEventListener("submit", (e)=>{
     e.preventDefault()
-    console.log("button clicked")
+    console.log(city.value);
+    fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city.value}&units=imperial&appid=ea06151ad04f45dc92fc791d7638ea3b`)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            console.log(data.main.temp);
+            let temp = Math.floor(data.main.temp)
+            let feelsLike = Math.floor(data.main.feels_like)
+            let maxTemp = Math.floor(data.main.temp_max)
+            let minTemp = Math.floor(data.main.temp_min)
+            let humidity = data.main.humidity
+            let pressure = data.main.pressure
+            let description = data.weather[0].description
+            let windSpeed = data.wind.speed
+            let windGusts = data.wind.gust
+            if(weatherContainer.innerHTML != ""){
+                weatherContainer.innerHTML = ""
+            }
+            createWeatherReport("h2 text-decoration-underline py-3", `Weather in ${city.value}:`) // div for current city
+            createWeatherReport("h5 py-1 text-capitalize", `${description}`)
+            createWeatherReport("h5 py-1", `Temperature: ${temp} ºF`) // div for current temp
+            createWeatherReport("h5 py-1", `Feels like: ${feelsLike} ºF`) // div for feels_like temp
+            createWeatherReport("h5 py-1", `Max Temperature: ${maxTemp} ºF`) // div for max temp
+            createWeatherReport("h5 py-1", `Min Tempertaure: ${minTemp} ºF`) // div for min temp
+            createWeatherReport("h5 py-1", `Humidity: ${humidity}%`) // div for humidity
+            createWeatherReport("h5 py-1", `Pressure: ${pressure} hPa`) // div for pressure
+            createWeatherReport("h5 py-1", `Wind Speed: ${windSpeed} mph with gusts up to ${windGusts} mph`) // div for wind speed
+        })
 })
 
-// getWeatherButton.addEventListener("click", (e)=>{
-//     onsubmit
-// })
 
-
-
-// function getWeather(city){
-//     console.log();
-// }
-
-// fetch("http://api.openweathermap.org/data/2.5/weather?q=Houston&appid=ea06151ad04f45dc92fc791d7638ea3b")
-//         .then(response => response.json())
-//         .then(data => {
-//             console.log(data);
-//             console.log(data.main.temp);
-//             let kelvin = data.main.temp
-
-//             // convert to Celius
-//             let degC = kelvin - 273.15
-//             let degF = Math.floor(degC * 1.8 + 32)
-//             console.log(`${degF} degrees F`);
-
-//             let div = document.querySelector("div")
-
-//             // div.innerHTML = `Current temperature in Houston is: ${degF} &#0176F`
-//             div.textContent = `Current temperature in Houston is: ${degF} ºF`
-//         })
