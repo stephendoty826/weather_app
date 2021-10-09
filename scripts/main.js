@@ -26,8 +26,8 @@ getWeatherForm.addEventListener("submit", (e)=>{
             let humidity = data.main.humidity
             let pressure = data.main.pressure
             let description = data.weather[0].description
-            let windSpeed = data.wind.speed
-            let windGusts = data.wind.gust
+            let windSpeed = Math.floor(data.wind.speed)
+            let windGusts = Math.ceil(data.wind.gust)
             if(weatherContainer.innerHTML != ""){
                 weatherContainer.innerHTML = ""
             }
